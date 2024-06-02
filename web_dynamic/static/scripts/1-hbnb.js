@@ -12,6 +12,5 @@ $(function() {
     } else {
       $('div.amenities > h4').html('&nbsp;');
     }
-    console.log(chkAmenity);
-  })
+  });
 });
