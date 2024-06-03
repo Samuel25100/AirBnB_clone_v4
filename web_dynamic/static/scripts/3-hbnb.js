@@ -24,15 +24,17 @@ $(function() {
     }
   });
 
-  const url1 = 'http://0.0.0.0:5000/api/v1/places_search';
   $.ajax({
-    url: placesUrl,
-    type: 'POST',
+    url: 'http://127.0.0.1:5001/api/v1/places_search',
+    method: 'POST',
     contentType: 'application/json',
     dataType: 'json',
-    data: JSON.stringify({}),
+    data: "{}",
     success: function(response) {
       $('section.places').empty();
+      if (response.length === 0) {
+        $('section.places').append('<h2> "Empty" </h2>')
+      }
       for (place of response) {
         let $article = $('<article class="pack"></article>');
         let $titleBox = $('<div class="title_box"></div>');
@@ -45,9 +47,11 @@ $(function() {
         $information.append(`<div class="number_bathrooms">${place.number_bathrooms} Bathrooms</div>`);
         $article.append($information);
         let $user = $('<div class="user"><b>Owner:</b></div>');
+        let $description = $(`<div class="description">${place.description}</div>`);
         $article.append($user);
+        $article.append($description);
         $('section.places').append($article);
       }
     }
-  });  
+  });
 });
