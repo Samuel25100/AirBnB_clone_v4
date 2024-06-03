@@ -25,17 +25,27 @@ $(function() {
   });
 
   const url1 = 'http://0.0.0.0:5000/api/v1/places_search';
-  $.get(url1, function(response, status) {
-    if (response.status === "OK" && status === "success") {
-      for (let i; i < length(response); i++) {
-        let $article = $('article.pack');
-        $('article .title_box h2.name').text(response[i].name);
-        $('article .title_box div.price_by_night').text(response[i].price_by_night);
-        $('article .information div.max_guest').text(response[i].max_guest);
-        $('article .information div.number_rooms').text(response[i].number_rooms);
-        $('article .information div.number_bathrooms').text(response[i].number_bathrooms);
-        $('article .user div.description').text(response[i].description);
-
+  $.ajax({
+    url: placesUrl,
+    type: 'POST',
+    contentType: 'application/json',
+    dataType: 'json',
+    data: JSON.stringify({}),
+    success: function(response) {
+      $('section.places').empty();
+      for (place of response) {
+        let $article = $('<article class="pack"></article>');
+        let $titleBox = $('<div class="title_box"></div>');
+        $titleBox.append(`<h2 class="name">${place.name}</h2>`);
+        $titleBox.append(`<div class="price_by_night">$${place.price_by_night}</div>`);
+        $article.append($titleBox);
+        let $information = $('<div class="information"></div>');
+        $information.append(`<div class="max_guest">${place.max_guest} Guests</div>`);
+        $information.append(`<div class="number_rooms">${place.number_rooms} Rooms</div>`);
+        $information.append(`<div class="number_bathrooms">${place.number_bathrooms} Bathrooms</div>`);
+        $article.append($information);
+        let $user = $('<div class="user"><b>Owner:</b></div>');
+        $article.append($user);
         $('section.places').append($article);
       }
     }
